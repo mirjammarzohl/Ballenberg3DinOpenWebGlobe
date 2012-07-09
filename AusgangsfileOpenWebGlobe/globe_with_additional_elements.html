@@ -34,125 +34,129 @@
 <script type="text/javascript" src="../openwebglobe-0.9.2.js"></script>
 
 <script type="text/javascript">
-
-//GLOBALE VARIABLEN
-var bycicleLayer; //globale Variable für den POI-layer
-//------------------------------------------------------------------------------
-//FUNKTIONEN
-//------------------------------------------------------------------------------
-// OnRender Funktion wird für jedes Frame ausgeführt
-// Beinhaltet die Anleitung zum bedienen des virtuellen Globus
-//------------------------------------------------------------------------------
-function OnRender(context)
-{
-    ogSetTextColor(context, 0,1,0);
-    ogDrawText(context, "Ein Klick auf die mittlere Maustaste fügt ein POI hinzu", 0, 80);
-    ogDrawText(context, "Drücke '1' um die POIs auszublenden",0,50);
-    ogDrawText(context, "Drücke '2' um die POIs wieder einzublenden",0,20);
-}
-
-//------------------------------------------------------------------------------
-// Mouse-Down-Event: Wird beim klicken mit der Maus aufgerufen
-// setzt an der Position des Klicks ein neuer POI ab
-//------------------------------------------------------------------------------
-function OnMouseDown(context, button, mx, my)
-{
-    // retrieve the scene attached to context:
-    var scene = ogGetScene(context);
-
-    // call the pickglobe function, this gives the result in lng, lat, elv
-    var result = ogPickGlobe(scene, mx, my);
-    if (button == 1 && result[0]) //if the middle mouse button is pressed and a coordinate is defined
+    //------------------------------------------------------------------------------
+    //GLOBALE VARIABLEN
+    //------------------------------------------------------------------------------
+    var bycicleLayer; //globale Variable für den POI-layer
+    //------------------------------------------------------------------------------
+    //FUNKTIONEN
+    //------------------------------------------------------------------------------
+    // OnRender Funktion wird für jedes Frame ausgeführt
+    // Beinhaltet die Anleitung zum bedienen des virtuellen Globus
+    //------------------------------------------------------------------------------
+    function OnRender(context)
     {
-        // place poi:
-        var NewPoiDefinition =
+        ogSetTextColor(context, 0,1,0);
+        ogDrawText(context, "Ein Klick auf die mittlere Maustaste fügt ein POI hinzu", 0, 100);
+        ogDrawText(context, "Drücke '1' um die POIs auszublenden",0,70);
+        ogDrawText(context, "Drücke '2' um die POIs wieder einzublenden",0,40);
+        ogDrawText(context, "Drücke '3' um den POI-Layer zu löschen",0,10);
+    }
+
+    //------------------------------------------------------------------------------
+    // Mouse-Down-Event: Wird beim klicken mit der Maus aufgerufen
+    // setzt an der Position des Klicks ein neuer POI ab
+    //------------------------------------------------------------------------------
+    function OnMouseDown(context, button, mx, my)
+    {
+        // Fragt die zu context gehörige Szene ab:
+        var scene = ogGetScene(context);
+
+        // Ruft die PickGlobe-Funktion auf -> liefert als Resultat die Koordinaten lng, lat, elv
+        var result = ogPickGlobe(scene, mx, my);
+        if (button == 1 && result[0]) //if the middle mouse button is pressed and a coordinate is defined
         {
-            icon     : "http://www.openwebglobe.org/art/cycling.png",
-            text 	  : "Position: (" + result[1].toFixed(3) + ", " + result[2].toFixed(3) + ", " + result[3].toFixed(0) + ")",
-            position : [result[1], result[2], result[3]+2000],
-            size 	  : 20,
-            flagpole : true
+            // Platziert den POI:
+            var NewPoiDefinition =
+            {
+                icon     : "cycling.png",
+                text 	  : "Position: (" + result[1].toFixed(3) + ", " + result[2].toFixed(3) + ", " + result[3].toFixed(0) + ")",
+                position : [result[1], result[2], result[3]+2000],
+                size 	  : 20,
+                flagpole : true
+            };
+
+            var poi = ogCreatePOI(bycicleLayer,NewPoiDefinition);
+        }
+    }
+
+    //------------------------------------------------------------------------------
+    // "Tasten drück"-funktion (OnKeyDown)
+    // -> Übersetzung in ASCII-Code unter: http://www.learning-how.to/Interaktion_und_Multimedia/Elemente-Gameprogrammierung/content-docs/06-tastatura.php
+    //------------------------------------------------------------------------------
+    function OnKeyDown(ctx, keycode)
+    {
+        if ( keycode == 49) // '1' was pressed
+        {
+            //Blendet den bycicle poi layer aus
+            ogHidePOILayer(bycicleLayer);
+        }
+        if ( keycode == 50) // '2' was pressed
+        {
+            //Blendet den bycicle poi layer ein
+            ogShowPOILayer(bycicleLayer);
+        }
+        if ( keycode == 51) // '3' was pressed
+        {
+            //entfernt den bycicle poi layer -> löscht den Speicher
+            ogRemovePOILayer(bycicleLayer);
+        }
+
+    }
+    //------------------------------------------------------------------------------
+    function main()
+    {
+        // (0) Definition Artwork directory (Bildverzeichnis). Because of CORS (Cross-origin resource sharing) this can't be local
+        // if you want to open this using file://...
+        ogSetArtworkDirectory("http://www.openwebglobe.org/art/");
+
+        // (1) Setzt die Render-Umgebung auf -> Rückgabewert = context_id
+        // first parameter is canvas-id and second is "fullscreen"
+        var ctx = ogCreateContextFromCanvas("canvas", true);
+
+        // (2) Kreiert einen virtuellen Globus mit WGS84 Scene und Kamera
+        var globe = ogCreateGlobe(ctx);
+
+        // (3) Bild- und Höhenlayer definieren und hinzufügen
+
+        var imgBlueMarble500 =
+        {
+            url     : ["http://www.openwebglobe.org/data/img"],
+            layer   : "World500",
+            service : "i3d"
+        };
+        var imgSWISSTOPO =
+        {
+            url     : ["http://10.42.2.37"],
+            layer   : "swissimage",
+            service : "owg"
+        };
+        var elvDHM =
+        {
+            url     : ["http://10.42.2.37"],
+            layer   : "DHM25",
+            service : "owg"
         };
 
-        var poi = ogCreatePOI(bycicleLayer,NewPoiDefinition);
-    }
-}
+        ogAddImageLayer(globe, imgBlueMarble500);
+        ogAddImageLayer(globe, imgSWISSTOPO);
+        ogAddElevationLayer(globe, elvDHM);
 
-//------------------------------------------------------------------------------
-// Key down callback function.
-function OnKeyDown(ctx, keycode)
-{
-    if ( keycode == 49) // '1' was pressed
-    {
-        //hide the bycicle poi layer
-        ogHidePOILayer(bycicleLayer);
-    }
-    if ( keycode == 50) // '2' was pressed
-    {
-        //show the bycicle poi layer
-        ogShowPOILayer(bycicleLayer);
-    }
-    if ( keycode == 51) // '3' was pressed
-    {
-        //show the bycicle poi layer
-        ogRemovePOILayer(bycicleLayer);
-    }
+        // (4) Set the "Render-Callback" function.
+        // The callback function will be called everytime a frame is drawn.
+        ogSetRenderFunction(ctx, OnRender);
 
-}
-//------------------------------------------------------------------------------
-function main()
-{
-   // (0) Set location of Artwork directory. Because of CORS this can't be local
-   // if you want to open this using file://...
-   ogSetArtworkDirectory("http://www.openwebglobe.org/art/");
-   
-   // (1) create an OpenWebGlobe context using canvas
-   // first parameter is canvas-id and second is "fullscreen"
-   var ctx = ogCreateContextFromCanvas("canvas", true);
-   
-   // (2) Create a virtual globe
-   var globe = ogCreateGlobe(ctx);
-   
-   // (3) Add an image and an elevation layer
-   
-   var imgBlueMarble500 = 
-   {
-      url     : ["http://www.openwebglobe.org/data/img"],
-      layer   : "World500",
-      service : "i3d"
-   };
-   var imgLandsatCH =
-    {
-        url     : ["http://www.openwebglobe.org/data/img"],
-        layer   : "LandsatCH",
-        service : "i3d"
-    };
-   var elvSRTM_CH = 
-   {
-      url     : ["http://www.openwebglobe.org/data/elv"],
-      layer   : "SRTM",
-      service : "i3d"
-   };
+        // (5) Set the background color
+        ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1);
+    }
+    //------------------------------------------------------------------------------
 
-   ogAddImageLayer(globe, imgBlueMarble500);
-   ogAddImageLayer(globe, imgLandsatCH);
-   ogAddElevationLayer(globe, elvSRTM_CH);
-
-   // (4) Set the "Render-Callback" function.
-   // The callback function will be called everytime a frame is drawn.
-   ogSetRenderFunction(ctx, OnRender);
-   
-   // (5) Set the background color
-   ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1); 
-}
-//------------------------------------------------------------------------------
-   
 </script>
 
 </head>
 <body onload="main()">
-   <div style="text-align: center">
-   <canvas id="canvas"></canvas>          
-   </div>
+<div style="text-align: center">
+    <canvas id="canvas"></canvas>
+</div>
 </body>
 </html>
