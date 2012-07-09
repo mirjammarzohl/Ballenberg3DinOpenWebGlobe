@@ -50,7 +50,7 @@
         ogDrawText(context, "Ein Klick auf die mittlere Maustaste fügt ein POI hinzu", 0, 100);
         ogDrawText(context, "Drücke '1' um die POIs auszublenden",0,70);
         ogDrawText(context, "Drücke '2' um die POIs wieder einzublenden",0,40);
-        ogDrawText(context, "Drücke '3' um den POI-Layer zu löschen",0,10);
+        ogDrawText(context, "Drücke '3' um den POI-Layer zu löschen (nicht ausprogrammiert)",0,10);
     }
 
     //------------------------------------------------------------------------------
@@ -146,8 +146,19 @@
         // The callback function will be called everytime a frame is drawn.
         ogSetRenderFunction(ctx, OnRender);
 
-        // (5) Set the background color
+        // (5) Set the mouse down function. We need this for picking!
+        ogSetMouseDownFunction(ctx, OnMouseDown);
+
+        // (6) Set the key down callback function
+        ogSetKeyDownFunction(ctx, OnKeyDown);
+
+        // (7) Set the background color
         ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1);
+
+        // (8) Create a POI-Layer
+        // first, we need to retrieve the scene and the world:
+        var scene = ogGetScene(ctx);
+        var world = ogGetWorld(scene);
     }
     //------------------------------------------------------------------------------
 
