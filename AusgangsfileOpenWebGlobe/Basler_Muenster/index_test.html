@@ -1,0 +1,156 @@
+﻿<!--
+*****************************************************************************
+*   This is an automatically generated file for 3d model preview  			*
+*																			*
+*	Further information: 		www.openwebglobe.org						*
+*							support@openwebglobe.org						*
+*																			*
+*	Licensed under MIT License. Read the file LICENSE for more information  *
+*****************************************************************************/
+-->
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="http://www.openwebglobe.org/js/openwebglobe-0.9.7.js"></script>
+<script type="text/javascript">
+    //------------------------------------------------------------------------------
+    // Funktionen aus dem Gebäude platzieren Beispiel
+    //------------------------------------------------------------------------------
+    function OnKeyDown(ctx,key)
+    {
+        var scene = ogGetScene(ctx);
+        if(key == 49)
+        {
+            yaw = yaw+1;
+        }
+        if(key == 50)
+        {
+            yaw = yaw-1;
+        }
+        if(key == 51)
+        {
+            lng = lng+0.00001;
+        }
+        if(key == 52)
+        {
+            lng = lng-0.00001;
+        }
+        if(key == 53)
+        {
+            lat = lat+0.00001;
+        }
+        if(key == 54)
+        {
+            lat = lat-0.00001;
+        }
+        if(key == 55)
+        {
+            elv = elv+1;
+        }
+        if(key == 56)
+        {
+            elv = elv-1;
+        }
+        if(key == 57)
+        {
+            ogHideGeometry(geometry1);
+        }
+        if(key == 48)
+        {
+            ogShowGeometry(geometry1);
+        }
+        if(key == 89) //A
+        {
+            scale = scale+0.1;
+            ogDestroyGeometry(geometry1);
+            var img = getImage(scale,lng,lat,elv,yaw,pitch,roll);
+            geometry2 = ogCreateGeometry(geometrylayer, img);
+        }
+        if(key == 81) //Q
+        {
+            scale = scale-0.1;
+            ogDestroyGeometry(geometry1);
+            var img = getImage(scale,lng,lat,elv,yaw,pitch,roll);
+            geometry2 = ogCreateGeometry(geometrylayer, img);
+        }
+        ogSetGeometryPositionWGS84(geometry1,lng,lat,elv,yaw,pitch,roll);
+        console.log(lng+","+lat+","+elv+","+yaw+","+pitch+","+roll);
+    }
+    //-------------------------------------------------------------------------------
+    //Function OnRender nicht im Main
+    //-------------------------------------------------------------------------------
+    function OnRender()
+    {
+        ogSetGeometryPositionWGS84(geometry1,lng,lat,elv,yaw,pitch,roll);
+    }
+    var geometrylayer = null;
+    var hidden = false;
+    var geometry1 = null;
+
+    //------------------------------------------------------------------------------
+    //Function main aus dem index  Beispiel
+    //------------------------------------------------------------------------------
+    function main()
+    {   //Vergabe der Positionswerte
+
+        yaw = -31;
+        pitch = -90;
+        roll = 0;
+        lng = 7.592678964580000;
+        lat = 47.55636475280000;
+        elv = 0;
+        scale = 1;
+
+        // (0) Set location of Artwork directory. Because of CORS this can't be local
+        // if you want to open this using file://...
+        ogSetArtworkDirectory("http://www.openwebglobe.org/art/");
+
+        // (1) create an OpenWebGlobe cont1ext using canvas
+        // first parameter is canvas-id and second is "fullscreen"
+        var ctx = ogCreateContextFromCanvas("canvas", true);
+
+        // (2) Create a virtual globe
+        var globe = ogCreateGlobe(ctx);
+
+        var imgOpenStreetMap =
+        {
+            url     : ["http://a.tile.openstreetmap.org", "http://b.tile.openstreetmap.org", "http://c.tile.openstreetmap.org" ],
+            service : "osm"
+        };
+        ogAddImageLayer(globe, imgOpenStreetMap);
+
+        // (6) Set the background color
+        ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1);
+
+        // (7) 3D Model
+        // first, we need to retrieve the scene:
+        var scene = ogGetScene(ctx);
+
+        //then, we need to retrieve the world
+        var world = ogGetWorld(scene);
+
+        //create a geometry layer
+        geometrylayer = ogCreateGeometryLayer(world,"buildings");
+
+
+        // definition of geometry options.
+        // A geometry is a container for meshes
+        // a mesh is a container of surfaces. every surface needs a json file.
+
+
+        //create the first 3d model
+        geometry1 = ogLoadGeometryAsync(geometrylayer,'model.json');
+        ogFlyToLookAtPosition(scene,7.59267896458,47.5563647528,0.0,500,0,-45,0);
+        ogSetKeyDownFunction(ctx, OnKeyDown);
+        ogSetRenderFunction(ctx, OnRender);
+    }
+
+</script>
+
+</head>
+<body onload="main()">
+<div style="text-align: center">
+    <canvas id="canvas"></canvas>
+</div>
+</body>
+</html>
