@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<!--
+/*******************************************************************************
+#      ____               __          __  _      _____ _       _               #
+#     / __ \              \ \        / / | |    / ____| |     | |              #
+#    | |  | |_ __   ___ _ __ \  /\  / /__| |__ | |  __| | ___ | |__   ___      #
+#    | |  | | '_ \ / _ \ '_ \ \/  \/ / _ \ '_ \| | |_ | |/ _ \| '_ \ / _ \     #
+#    | |__| | |_) |  __/ | | \  /\  /  __/ |_) | |__| | | (_) | |_) |  __/     #
+#     \____/| .__/ \___|_| |_|\/  \/ \___|_.__/ \_____|_|\___/|_.__/ \___|     #
+#           | |                                                                #
+#           |_|                 _____ _____  _  __                             #
+#                              / ____|  __ \| |/ /                             #
+#                             | (___ | |  | | ' /                              #
+#                              \___ \| |  | |  <                               #
+#                              ____) | |__| | . \                              #
+#                             |_____/|_____/|_|\_\                             #
+#                                                                              #
+#                              (c) 2010-2011 by                                #
+#           University of Applied Sciences Northwestern Switzerland            #
+#                     Institute of Geomatics Engineering                       #
+#                           martin.christen@fhnw.ch                            #
+********************************************************************************
+*     Licensed under MIT License. Read the file LICENSE for more information   *
+*******************************************************************************/
+
+                      GLOBE exercise with basic POIs
+*******************************************************************************/
+-->
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+
+    <title>GLOBE with basic POIs </title>
+
+    <script type="text/javascript" src="../openwebglobe-0.9.2.js"></script>
+
+    <script type="text/javascript">
+
+    //------------------------------------------------------------------------------
+    //GLOBALE VARIABLEN
+    //------------------------------------------------------------------------------
+    var bycicleLayer; //globale Variable für den POI-layer
+    //------------------------------------------------------------------------------
+    //FUNKTIONEN
+    //------------------------------------------------------------------------------
+    // OnRender Funktion wird für jedes Frame ausgeführt
+    // Beinhaltet die Anleitung zum bedienen des virtuellen Globus
+    //------------------------------------------------------------------------------
+    function OnRender(context)
+    {
+        ogSetTextColor(context, 0,1,0);
+        ogDrawText(context, "Ein Klick auf die mittlere Maustaste fügt ein POI hinzu", 0, 110);
+        ogDrawText(context, "Drücke '1' um die POIs auszublenden",0,80);
+        ogDrawText(context, "Drücke '2' um die POIs wieder einzublenden",0,50);
+        ogDrawText(context, "Drücke '4' um die Liste der digitalisierten Stützpunkte zu erhalten",0,20);
+
+    }
+    var count = 0;
+    var myPositions = new Array();
+    //------------------------------------------------------------------------------
+    // Mouse-Down-Event: Wird beim klicken mit der Maus aufgerufen
+    // setzt an der Position des Klicks ein neuer POI ab
+    //------------------------------------------------------------------------------
+    function OnMouseDown(context, button, mx, my)
+    {
+        // Fragt die zu context gehörige Szene ab:
+        var scene = ogGetScene(context);
+
+        // Ruft die PickGlobe-Funktion auf -> liefert als Resultat die Koordinaten lng, lat, elv
+        var result = ogPickGlobe(scene, mx, my);
+        if (button == 1 && result[0]) //if the middle mouse button is pressed and a coordinate is defined
+        {
+            // Platziert den POI:
+            var NewPoiDefinition =
+            {
+                //icon     : "http://www.openwebglobe.org/art/cycling.png",
+                text 	  : "Position: (" + result[1].toFixed(3) + ", " + result[2].toFixed(3) + ", " + result[3].toFixed(0) + ")",
+                position : [result[1], result[2], result[3]+2000],
+                size 	  : 20,
+                flagpole : true
+            };
+
+            var poi = ogCreatePOI(bycicleLayer,NewPoiDefinition);
+
+            myPositions[count] = result[1].toFixed(3) + ", " + result[2].toFixed(3) + ", " + result[3].toFixed(0);
+
+            count = count + 1;
+        }
+    }
+
+    //------------------------------------------------------------------------------
+    // "Tasten drück"-funktion (OnKeyDown)
+    // -> Übersetzung in ASCII-Code unter: http://www.learning-how.to/Interaktion_und_Multimedia/Elemente-Gameprogrammierung/content-docs/06-tastatura.php
+    //------------------------------------------------------------------------------
+    function OnKeyDown(ctx, keycode)
+    {
+        if ( keycode == 49) // '1' was pressed
+        {
+            //Blendet den bycicle poi layer aus
+            ogHidePOILayer(bycicleLayer);
+        }
+        if ( keycode == 50) // '2' was pressed
+        {
+            //Blendet den bycicle poi layer ein
+            ogShowPOILayer(bycicleLayer);
+        }
+        if ( keycode == 51) // '3' was pressed
+        {
+            //entfernt den bycicleLayer
+            ogRemovePOILayer(bycicleLayer);
+        }
+        if (keycode == 52)//'4' was pressed
+        {
+            document.write("Die digitalisierte Stützpunktliste lautet: <br />");
+            for (i=0;i<myPositions.length;i++)
+            {
+                document.write(i+1 + ": " + myPositions[i] + "<br />");
+            }
+        }
+
+    }
+    //------------------------------------------------------------------------------
+    function main()
+    {
+        // (0) Definition Artwork directory (Bildverzeichnis). Because of CORS (Cross-origin resource sharing) this can't be local
+        // if you want to open this using file://...
+        ogSetArtworkDirectory("http://www.openwebglobe.org/art/");
+
+        // (1) Setzt die Render-Umgebung auf -> Rückgabewert = context_id
+        // first parameter is canvas-id and second is "fullscreen"
+        var ctx = ogCreateContextFromCanvas("canvas", true);
+
+        // (2) Kreiert einen virtuellen Globus mit WGS84 Scene und Kamera
+        var globe = ogCreateGlobe(ctx);
+
+        // (3) Bild- und Höhenlayer definieren und hinzufügen
+
+        var imgBlueMarble500 =
+        {
+            url     : ["http://www.openwebglobe.org/data/img"],
+            layer   : "World500",
+            service : "i3d"
+        };
+        var imgSWISSTOPO =
+        {
+            url     : ["http://10.42.2.37"],
+            layer   : "swissimage",
+            service : "owg"
+        };
+        var elvDHM =
+        {
+            url     : ["http://10.42.2.37"],
+            layer   : "DHM25",
+            service : "owg"
+        };
+
+        ogAddImageLayer(globe, imgBlueMarble500);
+        ogAddImageLayer(globe, imgSWISSTOPO);
+        ogAddElevationLayer(globe, elvDHM);
+
+        // (4) Set the "Render-Callback" function.
+        // The callback function will be called everytime a frame is drawn.
+        ogSetRenderFunction(ctx, OnRender);
+
+        // (5) Set the mouse down function. We need this for picking!
+        ogSetMouseDownFunction(ctx, OnMouseDown);
+
+        // (6) Set the key down callback function
+        ogSetKeyDownFunction(ctx, OnKeyDown);
+
+        // (7) Set the background color
+        ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1);
+
+        // (8) Create a POI-Layer
+        // first, we need to retrieve the scene and the world:
+        var scene = ogGetScene(ctx);
+        var world = ogGetWorld(scene);
+
+    // Create the poi layer
+    var poilayer = ogCreatePOILayer(world,"misc");
+
+    // (9.1) let's define a poi with text:
+    var PoiDefinition =
+    {
+        text 		:  "Hello World! 世界你好",
+        position 	:  [7.66, 46.13, 6000],
+        size 		:  50,
+        flagpole 	:  true
+    };
+
+    // (9.2) then create the POI and add to the scene:
+    var poi = ogCreatePOI(poilayer, PoiDefinition);
+
+    // (9.3) let's create a poi with text and and icon. (text is optional)
+    var PoiDefinitionWithIcon =
+    {
+        text     :  "Airport",
+        icon     :  "http://www.openwebglobe.org/art/airport.png",
+        position :  [7.72, 46.71, 2000],
+        size 	   :  80,
+        flagpole :  false
+    };
+
+    // (9.4) then create and add it to the scene
+    ogCreatePOI(poilayer, PoiDefinitionWithIcon);
+
+    // Create another poi layer to place poi's interactive
+    bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
+    }
+    //------------------------------------------------------------------------------
+
+</script>
+
+</head>
+<body onload="main()">
+<div style="text-align: center">
+    <canvas id="canvas"></canvas>
+</div>
+</body>
+</html>
