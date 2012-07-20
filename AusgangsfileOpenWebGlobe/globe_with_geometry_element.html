@@ -32,7 +32,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 
-    <title>GLOBE with basic POIs </title>
+    <title>GLOBE with geometry Elements </title>
 
     <script type="text/javascript" src="../openwebglobe-0.9.2.js"></script>
 
@@ -42,6 +42,8 @@
     //GLOBALE VARIABLEN
     //------------------------------------------------------------------------------
     var bycicleLayer; //globale Variable für den POI-layer
+    var geometrylayer = null;
+    var hidden = false;
     //------------------------------------------------------------------------------
     //FUNKTIONEN
     //------------------------------------------------------------------------------
@@ -51,14 +53,11 @@
     function OnRender(context)
     {
         ogSetTextColor(context, 0,1,0);
-        ogDrawText(context, "Ein Klick auf die mittlere Maustaste fügt ein POI hinzu", 0, 110);
-        ogDrawText(context, "Drücke '1' um die POIs auszublenden",0,80);
-        ogDrawText(context, "Drücke '2' um die POIs wieder einzublenden",0,50);
-        ogDrawText(context, "Drücke '4' um die Liste der digitalisierten Stützpunkte zu erhalten",0,20);
-
+        ogDrawText(context, "Ein Klick auf die mittlere Maustaste fügt ein POI hinzu", 0, 80);
+        ogDrawText(context, "Drücke '1' um die POIs auszublenden",0,50);
+        ogDrawText(context, "Drücke '2' um die POIs wieder einzublenden",0,20);
     }
-    var count = 0;
-    var myPositions = new Array();
+
     //------------------------------------------------------------------------------
     // Mouse-Down-Event: Wird beim klicken mit der Maus aufgerufen
     // setzt an der Position des Klicks ein neuer POI ab
@@ -75,7 +74,7 @@
             // Platziert den POI:
             var NewPoiDefinition =
             {
-                //icon     : "http://www.openwebglobe.org/art/cycling.png",
+                icon     : "http://www.openwebglobe.org/art/cycling.png",
                 text 	  : "Position: (" + result[1].toFixed(3) + ", " + result[2].toFixed(3) + ", " + result[3].toFixed(0) + ")",
                 position : [result[1], result[2], result[3]+2000],
                 size 	  : 20,
@@ -83,10 +82,6 @@
             };
 
             var poi = ogCreatePOI(bycicleLayer,NewPoiDefinition);
-
-            myPositions[count] = result[1].toFixed(3) + ", " + result[2].toFixed(3) + ", " + result[3].toFixed(0);
-
-            count = count + 1;
         }
     }
 
@@ -108,16 +103,8 @@
         }
         if ( keycode == 51) // '3' was pressed
         {
-            //entfernt den bycicleLayer
+            //show the bycicle poi layer
             ogRemovePOILayer(bycicleLayer);
-        }
-        if (keycode == 52)//'4' was pressed
-        {
-            document.write("Die digitalisierte Stützpunktliste lautet: <br />");
-            for (i=0;i<myPositions.length;i++)
-            {
-                document.write(i+1 + ": " + myPositions[i] + "<br />");
-            }
         }
 
     }
@@ -178,40 +165,96 @@
         var scene = ogGetScene(ctx);
         var world = ogGetWorld(scene);
 
-    // Create the poi layer
-    var poilayer = ogCreatePOILayer(world,"misc");
+        // Create the poi layer
+        var poilayer = ogCreatePOILayer(world,"misc");
 
-    // (9.1) let's define a poi with text:
-    var PoiDefinition =
-    {
-        text 		:  "Hello World! 世界你好",
-        position 	:  [7.66, 46.13, 6000],
-        size 		:  50,
-        flagpole 	:  true
-    };
+        //create a geometry layer
+        geometrylayer = ogCreateGeometryLayer(world,"buildings");
 
-    // (9.2) then create the POI and add to the scene:
-    var poi = ogCreatePOI(poilayer, PoiDefinition);
+        /* (9.1) let's define a poi with text:
+        var PoiDefinition =
+        {
+            text 		:  "Hello World! 世界你好",
+            position 	:  [7.66, 46.13, 6000],
+            size 		:  50,
+            flagpole 	:  true
+        };
 
-    // (9.3) let's create a poi with text and and icon. (text is optional)
-    var PoiDefinitionWithIcon =
-    {
-        text     :  "Airport",
-        icon     :  "http://www.openwebglobe.org/art/airport.png",
-        position :  [7.72, 46.71, 2000],
-        size 	   :  80,
-        flagpole :  false
-    };
+        // (9.2) then create the POI and add to the scene:
+        var poi = ogCreatePOI(poilayer, PoiDefinition);
 
-    // (9.4) then create and add it to the scene
-    ogCreatePOI(poilayer, PoiDefinitionWithIcon);
+        // (9.3) let's create a poi with text and and icon. (text is optional)
+        var PoiDefinitionWithIcon =
+        {
+            text     :  "Airport",
+            icon     :  "http://www.openwebglobe.org/art/airport.png",
+            position :  [7.72, 46.71, 2000],
+            size 	   :  80,
+            flagpole :  false
+        };
 
-    // Create another poi layer to place poi's interactive
-    bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
+        // (9.4) then create and add it to the scene
+        ogCreatePOI(poilayer, PoiDefinitionWithIcon);
+        */
 
-         ogFlyToLookAtPosition(scene,7.59267896458,47.5563647528,0.0,500,0,0,0);
+        // Create another poi layer to place poi's interactive
+        bycicleLayer = ogCreatePOILayer(world,"byciclelayer");
+
+       var cube =[[
+        {
+            "id"  :  "1",
+            "Center"  :  [7.592568964580004,47.556344752799994,270],
+            "DiffuseMap"  :  "texture.jpg",
+            "VertexSemantic"  :  "pt",
+            "Vertices"  :  [	-3,-3,3,0.00000,1.00000,
+                -3,3,3,0.00000,0.00000,
+                3,-3,3,1.00000,1.00000,
+                3,3,3,1.00000,0.00000,
+                3,-3,3,0.00000,1.00000,
+                3,3,3,0.00000,0.00000,
+                3,-3,-3,1.00000,1.00000,
+                3,3,-3,1.00000,0.00000,
+                3,-3,-3,0.00000,1.00000,
+                3,3,-3,0.00000,0.00000,
+                -3,-3,-3,1.00000,1.00000,
+                -3,3,-3,1.00000,0.00000,
+                -3,-3,-3,0.00000,1.00000,
+                -3,3,-3,0.00000,0.00000,
+                -3,-3,3,1.00000,1.00000,
+                -3,3,3,1.00000,0.00000,
+                -3,3,3,0.00000,1.00000,
+                -3,3,-3,0.00000,0.00000,
+                3,3,3,1.00000,1.00000,
+                3,3,-3,1.00000,0.00000,
+                -3,-3,-3,0.00000,1.00000,
+                -3,-3,3,0.00000,0.00000,
+                3,-3,-3,1.00000,1.00000,
+                3,-3,3,1.00000,0.00000],
+            "IndexSemantic"  :  "TRIANGLES",
+            "Indices"  :  [	3,1,0,
+                2,3,0,
+                7,5,4,
+                6,7,4,
+                11,9,8,
+                10,11,8,
+                15,13,12,
+                14,15,12,
+                19,17,16,
+                18,19,16,
+                23,21,20,
+                22,23,20]
+
+            }
+        ]];
+
+        //load this geometry
+        var geometry = ogCreateGeometry(geometrylayer, cube);
+
+
+        ogFlyToLookAtPosition(scene,7.59267896458,47.5563647528,0.0,500,0,0,0);
+
     }
-    //------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
 </script>
 

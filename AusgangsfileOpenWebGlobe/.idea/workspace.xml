@@ -21,7 +21,17 @@
     <favorites_list name="AusgangsfileOpenWebGlobe" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="globe_with_geometry_and_vectorlayer.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/globe_with_geometry_and_vectorlayer.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="148" column="8" selection-start="6765" selection-end="6765" vertical-scroll-proportion="0.6740413">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -35,13 +45,17 @@
         <option value="$PROJECT_DIR$/globe_with_additional_elements.html" />
         <option value="$PROJECT_DIR$/Basler_Muenster/3DGeometry_LoadModel.html" />
         <option value="$PROJECT_DIR$/digitize_a_line_with_POI.html" />
+        <option value="$PROJECT_DIR$/digitize_with_POI.html" />
+        <option value="$PROJECT_DIR$/globe_with_geometry_element.html" />
+        <option value="$PROJECT_DIR$/test.json" />
+        <option value="$PROJECT_DIR$/globe_with_geometry_and_vectorlayer.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-9" />
     <option name="y" value="-11" />
-    <option name="width" value="870" />
+    <option name="width" value="805" />
     <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -70,6 +84,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -90,16 +114,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -107,8 +121,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="last_opened_file_path" value="E:/Backup_D/E1364_BTH9/04_Tutorials/Original/OpenWebGlobe-WebSDK-f50c3aa/WebGLViewer/tutorials/2.1_POI_Basic" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -153,13 +167,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-11" width="870" height="900" extended-state="0" />
+    <frame x="-9" y="-11" width="805" height="900" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28880867" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20234987" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -242,9 +256,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/digitize_a_line_with_POI.html">
+    <entry file="file://$PROJECT_DIR$/digitize_with_POI.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="0" selection-start="2145" selection-end="2145" vertical-scroll-proportion="0.025073746">
+        <state line="211" column="10" selection-start="8905" selection-end="8905" vertical-scroll-proportion="0.5395137">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/globe_with_geometry_element.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="248" column="0" selection-start="10142" selection-end="10142" vertical-scroll-proportion="-74.666664">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/texture.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="38" selection-start="886" selection-end="886" vertical-scroll-proportion="0.5690377">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/globe_with_geometry_and_vectorlayer.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="148" column="8" selection-start="6765" selection-end="6765" vertical-scroll-proportion="0.6740413">
           <folding />
         </state>
       </provider>
