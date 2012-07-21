@@ -21,7 +21,17 @@
     <favorites_list name="AusgangsfileOpenWebGlobe" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="globe_with_animated_geometry_element.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/globe_with_animated_geometry_element.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="79" column="88" selection-start="4043" selection-end="4043" vertical-scroll-proportion="0.34070796">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -39,13 +49,14 @@
         <option value="$PROJECT_DIR$/globe_with_geometry_element.html" />
         <option value="$PROJECT_DIR$/test.json" />
         <option value="$PROJECT_DIR$/globe_with_geometry_and_vectorlayer.html" />
+        <option value="$PROJECT_DIR$/globe_with_animated_geometry_element.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-9" />
     <option name="y" value="-11" />
-    <option name="width" value="762" />
+    <option name="width" value="759" />
     <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -111,8 +122,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="last_opened_file_path" value="E:/Backup_D/E1364_BTH9/04_Tutorials/Original/OpenWebGlobe-WebSDK-f50c3aa/WebGLViewer/tutorials/2.1_POI_Basic" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -157,13 +168,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-11" width="762" height="900" extended-state="0" />
-    <editor active="false" />
+    <frame x="-9" y="-11" width="759" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38865837" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15833333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -266,7 +277,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/globe_with_geometry_and_vectorlayer.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="148" column="8" selection-start="6765" selection-end="6765" vertical-scroll-proportion="0.40117994">
+        <state line="148" column="8" selection-start="6765" selection-end="6765" vertical-scroll-proportion="0.40117994" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/globe_with_animated_geometry_element.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="88" selection-start="4043" selection-end="4043" vertical-scroll-proportion="0.34070796">
           <folding />
         </state>
       </provider>
