@@ -29,119 +29,136 @@
 
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
 
-    <title>GLOBE with geometry Elements </title>
+<title>Verschieben des Cube durch klicken</title>
 
-    <script type="text/javascript" src="../openwebglobe-0.9.9a.js"></script>
+<script type="text/javascript" src="../openwebglobe-0.9.9a.js"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-    //------------------------------------------------------------------------------
-    //GLOBALE VARIABLEN
-    //------------------------------------------------------------------------------
-    var geometrylayer = null;
-    var hidden = false;
-    var geometry = null;
-    //------------------------------------------------------------------------------
-    //FUNKTIONEN
-    //------------------------------------------------------------------------------
-    // OnRender Funktion wird für jedes Frame ausgeführt
-    // Beinhaltet die Anleitung zum bedienen des virtuellen Globus
-    //------------------------------------------------------------------------------
-    function OnRender(context)
+//------------------------------------------------------------------------------
+//GLOBALE VARIABLEN
+//------------------------------------------------------------------------------
+
+var vectorlayer = null;
+var geometrylayer = null;
+var hidden = false;
+var geometry = null;
+
+var cubeLong = 8.085485;
+var cubeLat = 46.749752;
+var cubeElv = 654.5;
+
+var cube = null;
+
+//------------------------------------------------------------------------------
+//FUNKTIONEN
+//------------------------------------------------------------------------------
+// OnRender Funktion wird für jedes Frame ausgeführt
+// Beinhaltet die Anleitung zum bedienen des virtuellen Globus
+//------------------------------------------------------------------------------
+function OnRender(context)
+{
+    ogSetTextColor(context, 0,1,0);
+    ogDrawText(context, "Ein Klick auf den Cube blendet diesen aus", 0, 110);
+    ogDrawText(context, "Ein rechtsklick an eine beliebige stelle bewegt den Cube dort hin",0,80);
+}
+//------------------------------------------------------------------------------
+// Mouse-Down-Event: Wird beim klicken mit der Maus aufgerufen
+// setzt an der Position des Klicks ein neuer POI ab
+//------------------------------------------------------------------------------
+function OnMouseDown(context, button, mx, my)
+{
+    // Fragt die zu context gehörige Szene ab:
+    var scene = ogGetScene(context);
+
+    // Ruft die PickGlobe-Funktion auf -> liefert als Resultat die Koordinaten lng, lat, elv
+    var result = ogPickGlobe(scene, mx, my);
+
+    if(button == 0 )
     {
-        ogSetTextColor(context, 0,1,0);
-        ogDrawText(context,"Click on a geometry to hide it.",0,50);
-        ogDrawText(context,"Right click to show all geometries again.",0,20);
+        var geometry_id = ogPickGeometry(scene,mx,my);
+        if(geometry_id != -1)
+        {
+            ogHideGeometry(geometry); //hide the clicked mesh
+        }
     }
 
-    //------------------------------------------------------------------------------
-    // Mouse-Down-Event: Wird beim klicken mit der Maus aufgerufen
-    // setzt an der Position des Klicks ein neuer POI ab
-    //------------------------------------------------------------------------------
-    function OnMouseDown(context, button, mx, my)
+    if(button > 0 && result[0]) //mittlere oder rechte Maustaste
     {
-        // Fragt die zu context gehörige Szene ab:
-        var scene = ogGetScene(context);
+        ogShowGeometry(geometry);
 
-        if(button == 0)
-        {
-            //var geometry_id = ogPickGeometry(scene,mx,my);
-            //if(geometry_id != -1)
-            //{
-                ogHideGeometry(geometry); //hide the clicked mesh
-            //}
-        }
-        if(button > 0) //mittlere oder rechte Maustaste
-        {
-            //ogShowGeometry(geometry);
-            ogSetGeometryPositionWGS84(geometry,7.592568964580004,47.556344752799994,275, 0, 0, 0);
-        }
+        var ClickLat = result[1];
+        var ClickLong = result[2];
+        var ClickElv = result[3];
+
+        ogSetGeometryPositionWGS84(geometry,ClickLat,ClickLong,ClickElv+3, 0, 0, 0);
+
     }
+}
+//------------------------------------------------------------------------------
+function main()
+{
+    // (0) Definition Artwork directory (Bildverzeichnis). Because of CORS (Cross-origin resource sharing) this can't be local
+    // if you want to open this using file://...
+    ogSetArtworkDirectory("http://www.openwebglobe.org/art/");
 
-    //------------------------------------------------------------------------------
-    function main()
+    // (1) Setzt die Render-Umgebung auf -> Rückgabewert = context_id
+    // first parameter is canvas-id and second is "fullscreen"
+    var ctx = ogCreateContextFromCanvas("canvas", true);
+
+    // (2) Kreiert einen virtuellen Globus mit WGS84 Scene und Kamera
+    var globe = ogCreateGlobe(ctx);
+
+    // (3) Bild- und Höhenlayer definieren und hinzufügen
+
+    var imgBlueMarble500 =
     {
-        // (0) Definition Artwork directory (Bildverzeichnis). Because of CORS (Cross-origin resource sharing) this can't be local
-        // if you want to open this using file://...
-        ogSetArtworkDirectory("http://www.openwebglobe.org/art/");
+        url     : ["http://www.openwebglobe.org/data/img"],
+        layer   : "World500",
+        service : "i3d"
+    };
+    var imgSWISSTOPO =
+    {
+        url     : ["http://10.42.2.37"],
+        layer   : "swissimage",
+        service : "owg"
+    };
+    var elvDHM =
+    {
+        url     : ["http://10.42.2.37"],
+        layer   : "DHM25",
+        service : "owg"
+    };
 
-        // (1) Setzt die Render-Umgebung auf -> Rückgabewert = context_id
-        // first parameter is canvas-id and second is "fullscreen"
-        var ctx = ogCreateContextFromCanvas("canvas", true);
+    ogAddImageLayer(globe, imgBlueMarble500);
+    ogAddImageLayer(globe, imgSWISSTOPO);
+    ogAddElevationLayer(globe, elvDHM);
 
-        // (2) Kreiert einen virtuellen Globus mit WGS84 Scene und Kamera
-        var globe = ogCreateGlobe(ctx);
+    // (4) Set the "Render-Callback" function.
+    // The callback function will be called everytime a frame is drawn.
+    ogSetRenderFunction(ctx, OnRender);
 
-        // (3) Bild- und Höhenlayer definieren und hinzufügen
+    // (5) Set the mouse down function. We need this for picking!
+    ogSetMouseDownFunction(ctx, OnMouseDown);
 
-        var imgBlueMarble500 =
-        {
-            url     : ["http://www.openwebglobe.org/data/img"],
-            layer   : "World500",
-            service : "i3d"
-        };
-        var imgSWISSTOPO =
-        {
-            url     : ["http://10.42.2.37"],
-            layer   : "swissimage",
-            service : "owg"
-        };
-        var elvDHM =
-        {
-            url     : ["http://10.42.2.37"],
-            layer   : "DHM25",
-            service : "owg"
-        };
+    // (7) Set the background color
+    ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1);
 
-        ogAddImageLayer(globe, imgBlueMarble500);
-        ogAddImageLayer(globe, imgSWISSTOPO);
-        ogAddElevationLayer(globe, elvDHM);
+    // (8) Create a POI-Layer
+    // first, we need to retrieve the scene and the world:
+    var scene = ogGetScene(ctx);
+    var world = ogGetWorld(scene);
 
-        // (4) Set the "Render-Callback" function.
-        // The callback function will be called everytime a frame is drawn.
-        ogSetRenderFunction(ctx, OnRender);
+    //create a geometry layer
+    geometrylayer = ogCreateGeometryLayer(world,"buildings");
 
-        // (5) Set the mouse down function. We need this for picking!
-        ogSetMouseDownFunction(ctx, OnMouseDown);
-
-        // (7) Set the background color
-        ogSetBackgroundColor(ctx, 0.2,0.2,0.7,1);
-
-        // (8) Create a POI-Layer
-        // first, we need to retrieve the scene and the world:
-        var scene = ogGetScene(ctx);
-        var world = ogGetWorld(scene);
-
-        //create a geometry layer
-        geometrylayer = ogCreateGeometryLayer(world,"buildings");
-
-       var cube =[[
+    cube = [[
         {
             "id"  :  "1",
-            "Center"  :  [7.592568964580004,47.556344752799994,270],
+            "Center"  :  [cubeLong,cubeLat,cubeElv],
             "DiffuseMap"  :  "texture.jpg",
             "VertexSemantic"  :  "pt",
             "Vertices"  :  [	-3,-3,3,0.00000,1.00000,
@@ -182,17 +199,16 @@
                 23,21,20,
                 22,23,20]
 
-            }
-        ]];
+        }
+    ]];
 
-        //load this geometry
-        geometry = ogCreateGeometry(geometrylayer, cube);
+    //load the Cube geometry
+    geometry = ogCreateGeometry(geometrylayer, cube);
 
+    ogFlyToLookAtPosition(scene,8.085321,46.749982,700,500,0,-45,0);
 
-        ogFlyToLookAtPosition(scene,7.59267896458,47.5563647528, 275,100,0,0,0);
-
-    }
-    //--------------------------------------------------------------------------
+}
+//--------------------------------------------------------------------------
 
 </script>
 
