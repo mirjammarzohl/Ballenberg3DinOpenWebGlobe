@@ -32,7 +32,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 
-    <title>Versuch den Cube animiert von A nach B zu bewegen </title>
+    <title>Versuch den Cube immer mit der gleichen Geschwindigkeit von A zur Position des Mausklicks zu bewegen  </title>
 
     <script type="text/javascript" src="../openwebglobe-0.9.9a.js"></script>
 
@@ -51,9 +51,9 @@
     var ALong = 7.59;
     var ALat= 47.55;
     var AElv = 280;
-    var BLong = 7.591;
-    var BLat = 47.551;
-    var BElv = 290;
+    var BLong = null;
+    var BLat = null;
+    var BElv = null;
     var position = null;
     //------------------------------------------------------------------------------
     //FUNKTIONEN
@@ -66,7 +66,6 @@
         ogSetTextColor(context, 0,1,0);
         ogDrawText(context,"Right click to move the geometry animated from A to B",0,40);
         ogSetGeometryPositionWGS84(geometryA,ALong, ALat, AElv, 0,0,0);
-        ogSetGeometryPositionWGS84(geometryB,BLong, BLat, BElv, 0,0,0);
     }
 
     //------------------------------------------------------------------------------
@@ -86,21 +85,31 @@
         if(button > 0 && result[0]) //mittlere oder rechte Maustaste
         {
 
+            var BLong = result[1];
+            var BLat = result[2];
+            var BElv = result[3];
+
+            var x = (BLong-ALong)*(BLong-ALong)+(BLat-ALat)*(BLat-ALat)+(BElv-AElv)*(BElv-AElv);
+            var distance = Math.sqrt(x)
+            var End = Math.round(distance);
+            End = End-1;
+
+
                 	  function frame() {
 
                     	    position++  // update parameters
 
-                    	    var changeLong = ((BLong-ALong)/10)*position
-                            var changeLat = ((BLat-ALat)/10)*position
-                            var changeElv = ((BElv-AElv)/10)* position
+                    	    var changeLong = ((BLong-ALong)/End)*position
+                            var changeLat = ((BLat-ALat)/End)*position
+                            var changeElv = ((BElv-AElv)/End)* position
 
                           ogSetGeometryPositionWGS84(geometry,ALong+changeLong, ALat+changeLat, AElv+changeElv, 0, 0, 0);
 
-                    	    if (position == 10)  // check finish condition
+                    	    if (position == End)  // check finish condition
                         	      clearInterval(id)
                     	  }
 
-                var id = setInterval(frame, 100) // draw every 1000ms
+                var id = setInterval(frame, 10) // draw every 1000ms
         }
     }
 
@@ -211,7 +220,7 @@
         //load this geometry
         geometry = ogCreateGeometry(geometrylayer, cube);
         geometryA = ogCreateGeometry(geometrylayer, cube);
-        geometryB = ogCreateGeometry(geometrylayer, cube);
+
 
 
 
