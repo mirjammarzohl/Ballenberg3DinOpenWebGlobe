@@ -25,7 +25,7 @@
       <file leaf-file-name="globe_animation_step3.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/globe_animation_step3.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="107" column="44" selection-start="4954" selection-end="4954" vertical-scroll-proportion="0.84351146">
+            <state line="47" column="25" selection-start="2655" selection-end="2655" vertical-scroll-proportion="0.021628499">
               <folding />
             </state>
           </provider>
@@ -54,6 +54,7 @@
         <option value="$PROJECT_DIR$/globe_move_geometry.html" />
         <option value="$PROJECT_DIR$/globe_simply_animated_object.html" />
         <option value="$PROJECT_DIR$/globe_animation_step2.html" />
+        <option value="$PROJECT_DIR$/globe_animation_step3b.html" />
         <option value="$PROJECT_DIR$/globe_animation_step3.html" />
       </list>
     </option>
@@ -287,28 +288,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/globe_simply_animated_object.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="49" selection-start="2142" selection-end="2142" vertical-scroll-proportion="0.5839695">
-          <folding />
-        </state>
+        <state line="34" column="49" selection-start="2142" selection-end="2142" vertical-scroll-proportion="0.5839695" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/globe_move_geometry.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="5" selection-start="3983" selection-end="3983" vertical-scroll-proportion="0.021628499">
-          <folding />
-        </state>
+        <state line="86" column="5" selection-start="3983" selection-end="3983" vertical-scroll-proportion="0.021628499" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/globe_animation_step2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="0" selection-start="3440" selection-end="3440" vertical-scroll-proportion="-2.6153846">
-          <folding />
-        </state>
+        <state line="69" column="0" selection-start="3440" selection-end="3440" vertical-scroll-proportion="-2.6153846" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/globe_animation_step3b.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="89" column="0" selection-start="4172" selection-end="4172" vertical-scroll-proportion="0.80025446" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/globe_animation_step3.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="44" selection-start="4954" selection-end="4954" vertical-scroll-proportion="0.84351146">
+        <state line="47" column="25" selection-start="2655" selection-end="2655" vertical-scroll-proportion="0.021628499">
           <folding />
         </state>
       </provider>
